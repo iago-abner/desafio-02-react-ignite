@@ -1,9 +1,9 @@
-// import { GetStaticProps } from 'next';
+import { GetStaticProps } from 'next';
 import Link from 'next/link';
-
+import Prismic from '@prismicio/client';
 import { FiCalendar, FiUser } from 'react-icons/fi';
 import Header from '../components/Header';
-// import { getPrismicClient } from '../services/prismic';
+import { getPrismicClient } from '../services/prismic';
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
 
@@ -39,24 +39,28 @@ export default function Home(): JSX.Element {
               <ul>
                 <li>
                   <FiCalendar />
-                  <p>15 Mar 2021</p>
+                  15 Mar 2021
                 </li>
                 <li>
                   <FiUser />
-                  <p>Joseph Oliveira</p>
+                  Joseph Oliveira
                 </li>
               </ul>
             </a>
           </Link>
+          <button type="button">Carregar mais posts</button>
         </div>
       </main>
     </>
   );
 }
 
-// export const getStaticProps = async () => {
-//   // const prismic = getPrismicClient();
-//   // const postsResponse = await prismic.query(TODO);
-
-//   // TODO
-// };
+export const getStaticProps: GetStaticProps = async () => {
+  const prismic = getPrismicClient();
+  const postsResponse = await prismic.query(
+    [Prismic.Predicates.at('document.type', 'posts')],
+    {
+      pageSize: 1,
+    }
+  );
+};
